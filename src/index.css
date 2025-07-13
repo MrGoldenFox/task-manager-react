@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+*,
+*:active,
+*:before {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-bg: #f2f5ff;
+  --primary-bg-accent: #e5eafc;
+  --primary: #2e3a59;
+  --secondary: #242736;
+  --gray: #2e3a59;
+  --white: #ffffff;
+  --accent: #9c2cf3;
+  --accent-2: #3a49f9;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: var(--primary-bg);
+  overflow-x: hidden;
+}
+
+button, a {
+  cursor: pointer;
+  transition: 0.4s ease;
+}
+
+ul {
+  padding-left: 0;
+}
