@@ -26,6 +26,12 @@ export function taskReducer(state, action) {
         tasks: state.tasks.filter((task) => task.id !== action.payload),
       };
 
+    case "SET_TASKS":
+      return {
+        ...state,
+        tasks: action.payload,
+      };
+
     default:
       return state;
   }

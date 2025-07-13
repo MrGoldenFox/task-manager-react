@@ -1,6 +1,6 @@
 import { TaskItem } from "./TaskItem";
 
-export default function TaskList({ tasks, dispatch }) {
+export default function TaskList({ tasks, dispatch, user }) {
   return (
     <div className="flex flex-col gap-2">
       <h2 className="text-lg tracking-wide font-bold text-[var(--primary)]">Tasks</h2>
@@ -9,7 +9,7 @@ export default function TaskList({ tasks, dispatch }) {
       ) : (
         <ul className="flex flex-col justify-between gap-2">
           {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} dispatch={dispatch} />
+            <TaskItem key={task.id} task={task} dispatch={dispatch} user={user} />
           ))}
         </ul>
       )}
