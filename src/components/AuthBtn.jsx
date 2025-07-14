@@ -1,52 +1,9 @@
-import { useAuth } from "../context/AuthContext";
-import { supabase } from "../supabaseClient";
 import google from "../assets/google.svg";
 
-export default function AuthBtn() {
-  const { user } = useAuth();
-
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-    if (error) console.error("Ошибка входа:", error.message);
-  };
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-  };
-
-  if (!user) {
-    return (
-      <button
-        onClick={signInWithGoogle}
-        className="flex items-center gap-2 px-4 py-1 font-normal text-base bg-[var(--accent)] text-[var(--white)] rounded-3xl hover:bg-[var(--accent-2)]"
-      >
-        Sign In
-        <div className="w-8 h-8">
-          <img
-            src={google}
-            alt="Google Icon"
-            className="w-full h-full saturate-200"
-          />
-        </div>
-      </button>
-    );
-  }
-
+export function AuthBtn() {
   return (
-    <button
-      onClick={signOut}
-      className="flex items-center gap-2 px-4 py-1 font-normal text-base bg-[var(--accent)] text-[var(--white)] rounded-3xl hover:bg-[var(--accent-2)]"
-    >
-      Sign Out
-      <div className="w-8 h-8">
-        <img
-          src={google}
-          alt="Google Icon"
-          className="w-full h-full saturate-200"
-        />
-      </div>
+    <button className="border border-[var(--accent-hover)]/30 rounded-4xl py-1.5 px-5 flex justify-center items-center text-base hover:border-[var(--accent-hover)] hover:border-1 hover:shadow-sm shadow-fuchsia-700 gap-1">
+      Log-in <img src={google} alt="" />
     </button>
   );
 }

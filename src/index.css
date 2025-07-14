@@ -7,21 +7,24 @@
 }
 
 :root {
-  --primary-bg: #f2f5ff;
-  --primary-bg-accent: #e5eafc;
-  --primary: #2e3a59;
-  --secondary: #242736;
+  --primary-bg: #222222;
+  --primary-bg-accent: #303030;
+  --primary: #eeeeee;
+  --secondary: #859aff;
   --gray: #2e3a59;
   --white: #ffffff;
   --accent: #9c2cf3;
+  --accent-hover: #9000ff;
   --accent-2: #3a49f9;
+  --red: rgb(255, 68, 68);
 }
 
 body {
   padding: 0;
   margin: 0;
-  font-family: "Poppins", sans-serif;
   background: var(--primary-bg);
+  background-size: cover;
+  color: var(--primary);
   overflow-x: hidden;
 }
 

@@ -1,49 +1,20 @@
-import { useCallback } from "react";
-import { supabase } from "../supabaseClient";
+import { OctagonX } from "lucide-react";
 
-export function TaskItem({ task, dispatch, user }) {
-  const handleToggle = useCallback(async () => {
-    if (user) {
-      const { error } = await supabase
-        .from("tasks")
-        .update({ completed: !task.completed })
-        .eq("id", task.id);
-      if (!error) {
-        dispatch({ type: "TOGGLE_TASK", payload: task.id });
-      }
-    } else {
-      dispatch({ type: "TOGGLE_TASK", payload: task.id });
-    }
-  }, [task, dispatch, user]);
-
-  const handleDelete = useCallback(async () => {
-    if (user) {
-      const { error } = await supabase
-        .from("tasks")
-        .delete()
-        .eq("id", task.id);
-      if (!error) {
-        dispatch({ type: "DELETE_TASK", payload: task.id });
-      }
-    } else {
-      dispatch({ type: "DELETE_TASK", payload: task.id });
-    }
-  }, [task, dispatch, user]);
-
+export function TaskItem({ task, toggleCheckBox, deleteTask }) {
   return (
-    <li className="flex justify-between w-full py-3 px-5 bg-[var(--white)] rounded-2xl border-[var(--primary)]/10 border-1">
-      <div className="flex gap-2 items-center">
+    <li className="flex items-center justify-between w-full border p-2 border-white/20 rounded-sm focus:border-0 outline-0">
+      <div className="flex items-center gap-2">
         <input
           type="checkbox"
-          checked={task.completed}
-          onChange={handleToggle}
-          className="peer w-4.5 h-4.5"
+          checked={task.checked}
+          onChange={() => toggleCheckBox(task.id)}
+          className="appearance-none h-6 w-6 border border-white/50 checked:bg-[var(--accent)] checked:border-0 rounded-sm"
         />
-        <p style={{ textDecoration: task.completed ? "line-through" : "none" }}>
-          {task.todo}
-        </p>
+        <p className="font-normal tracking-wide">{task.text}</p>
       </div>
-      <button onClick={handleDelete}>❌</button>
+      <button className="w-6 h-6 my-auto" onClick={() => deleteTask(task.id)}>
+        <OctagonX color="var(--red)" />
+      </button>
     </li>
   );
 }

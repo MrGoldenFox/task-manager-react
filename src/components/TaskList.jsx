@@ -1,18 +1,25 @@
 import { TaskItem } from "./TaskItem";
 
-export default function TaskList({ tasks, dispatch, user }) {
+export function TaskList({ tasks, toggleCheckBox, deleteTask }) {
   return (
-    <div className="flex flex-col gap-2">
-      <h2 className="text-lg tracking-wide font-bold text-[var(--primary)]">Tasks</h2>
+    <>
+      <h2 className="text-xl font-semibold mb-2 text-[var(--secondary)]">
+        Tasks
+      </h2>
       {tasks.length === 0 ? (
-        <p className="text-[var(--secondary)]">No available tasks</p>
+        <p>Sorry, no task available <span className="text-3xl">😸</span></p>
       ) : (
-        <ul className="flex flex-col justify-between gap-2">
+        <ul className="flex flex-wrap gap-2">
           {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} dispatch={dispatch} user={user} />
+            <TaskItem
+              task={task}
+              key={task.id}
+              toggleCheckBox={toggleCheckBox}
+              deleteTask={deleteTask}
+            />
           ))}
         </ul>
       )}
-    </div>
+    </>
   );
 }

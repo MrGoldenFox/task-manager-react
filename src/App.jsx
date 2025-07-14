@@ -1,119 +1,58 @@
-import { useEffect, useMemo, useState, useCallback, useReducer } from "react";
-import { createClient } from "@supabase/supabase-js";
-import { taskReducer, getInitialState } from "./reducers/taskReducer";
-import Header from "./components/Header";
-import AddTaskForm from "./components/AddTaskForm";
-import TaskList from "./components/TaskList";
+import { useEffect, useState } from "react";
+import { AddTaskForm } from "./components/AddTaskForm";
 import { Greeting } from "./components/Greeting";
-
-const supabase = createClient(
-  "https://uzkjwjvxcyithriiynit.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6a2p3anZ4Y3lpdGhyaWl5bml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIzNjkyMDAsImV4cCI6MjA2Nzk0NTIwMH0.HuW7GoyZAzlCMvC_S_dwrkuWsdsW4INckRKGFQlDs60"
-);
+import { Header } from "./components/Header";
+import { SwitchTasks } from "./components/SwitchTasks";
+import { TaskList } from "./components/TaskList";
+import react from "./assets/react.svg"
 
 export default function App() {
-  const [state, dispatch] = useReducer(taskReducer, getInitialState());
-  const [filter, setFilter] = useState("active");
-  const [user, setUser] = useState(null);
+  const [tasks, setTasks] = useState(() => {
+    const stored = localStorage.getItem("tasks");
 
-  const fetchTasks = useCallback(async (userId) => {
-    const { data, error } = await supabase
-      .from("tasks")
-      .select("*")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
-    if (!error) {
-      dispatch({ type: "SET_TASKS", payload: data });
-    }
-  }, []);
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  const [filter, setFilter] = useState("active");
 
   useEffect(() => {
-    const init = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-      if (user) {
-        fetchTasks(user.id);
-      } else {
-        const stored = localStorage.getItem("tasks");
-        dispatch({
-          type: "SET_TASKS",
-          payload: stored ? JSON.parse(stored) : [],
-        });
-      }
-    };
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
-    init();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        const u = session?.user || null;
-        setUser(u);
-        if (u) {
-          fetchTasks(u.id);
-        } else {
-          const stored = localStorage.getItem("tasks");
-          dispatch({
-            type: "SET_TASKS",
-            payload: stored ? JSON.parse(stored) : [],
-          });
-        }
-      }
+  function toggleCheckBox(id) {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, checked: !task.checked } : task
     );
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [fetchTasks]);
+    setTasks(updatedTasks);
+  }
 
-  const handleAddTask = useCallback(
-    async (title) => {
-      if (!title) return;
-      if (user) {
-        const newTask = {
-          todo: title,
-          completed: false,
-          user_id: user.id,
-        };
-        const { data, error } = await supabase
-          .from("tasks")
-          .insert([newTask])
-          .select()
-          .single();
-        if (!error && data) {
-          dispatch({ type: "ADD_TASK", payload: data });
-        }
-      } else {
-        const newTask = {
-          id: Date.now(),
-          todo: title,
-          completed: false,
-        };
-        dispatch({ type: "ADD_TASK", payload: newTask });
-      }
-    },
-    [dispatch, user]
-  );
+  function deleteTask(id) {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
 
-  useEffect(() => {
-    if (!user) {
-      localStorage.setItem("tasks", JSON.stringify(state.tasks));
-    }
-  }, [state.tasks, user]);
+    setTasks(updatedTasks);
+  }
 
-  const filteredTasks = useMemo(() => {
-    if (filter === "active") return state.tasks.filter((t) => !t.completed);
-    if (filter === "completed") return state.tasks.filter((t) => t.completed);
-    return state.tasks;
-  }, [filter, state.tasks]);
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "active") return !task.checked;
+    if (filter === "completed") return task.checked;
+    return true;
+  });
 
   return (
-    <div className="app container w-[90%] flex flex-col mx-auto">
-      <Header />
-      <Greeting filter={filter} setFilter={setFilter} dispatch={dispatch} />
-      <AddTaskForm onAdd={handleAddTask} />
-      <TaskList tasks={filteredTasks} dispatch={dispatch} user={user} />
-    </div>
+    <>
+      <img src={react} alt="" className="fixed z-[-1] min-w-full min-h-full"/>
+      <div className="w-full mx-auto backdrop-blur-xs bg-[var(--primary-bg)]/90 min-h-screen px-[5vw] py-5">
+        <Header />
+        <Greeting />
+        <AddTaskForm setTasks={setTasks} tasks={tasks} />
+        <SwitchTasks setFilter={setFilter} filter={filter} />
+        <TaskList
+          tasks={filteredTasks}
+          toggleCheckBox={toggleCheckBox}
+          deleteTask={deleteTask}
+        />
+      </div>
+    </>
   );
 }

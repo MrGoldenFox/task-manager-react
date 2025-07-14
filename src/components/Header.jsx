@@ -1,10 +1,10 @@
 import logo from "../assets/logo.svg";
-import AuthBtn from "./AuthBtn";
+import { AuthBtn } from "./AuthBtn";
 
-export default function Header() {
+export function Header() {
   return (
-    <header className="flex justify-between py-4 items-center">
-      <img src={logo} alt="" className="w-10 h-10" />
+    <header className="flex justify-between items-center py-2">
+      <img src={logo} alt="" className="h-10 w-10"/>
       <AuthBtn />
     </header>
   );
