@@ -2,8 +2,8 @@ import { OctagonX } from "lucide-react";
 
 export function TaskItem({ task, toggleCheckBox, deleteTask }) {
   return (
-    <li className="flex justify-between items-center w-full border rounded-xs p-2 border-[var(--primary)]/40 dark:border-[var(--primary-bg)]/40">
-      <div className="flex justify-between items-center gap-1">
+    <li className="flex justify-between items-center w-full border rounded-xs px-2 py-3 border-[var(--primary)]/40 dark:border-[var(--primary-bg)]/40">
+      <div className="flex justify-between items-center gap-2">
         <input
           type="checkbox"
           checked={task.checked}

@@ -5,7 +5,7 @@ export function ThemeBtn({ styles }) {
 
   return (
     <button className={`${styles}`} onClick={() => toggleTheme()}>
-      {theme === "light" ? "Dark🌙" : "Light☀️"}
+      {theme === "light" ? "Dark🌙" : "Light☀️"}Theme
     </button>
   );
 }

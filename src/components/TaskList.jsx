@@ -16,7 +16,7 @@ export function TaskList({
           Good job, no task available <span>😸</span>
         </p>
       ) : (
-        <ul className="flex flex-wrap flex-col gap-4">
+        <ul className="flex flex-wrap flex-col gap-2">
           {tasks.map((task) => (
             <TaskItem
               task={task}

@@ -31,25 +31,31 @@ export default function App() {
     [tasks]
   );
 
-  const deleteTask = useCallback((id) => {
-    const taskToDelete = tasks.find((task) => task.id === id);
+  const deleteTask = useCallback(
+    (id) => {
+      clearTimeout(timeOutRef.current);
 
-    setTasks((prev) => prev.filter((task) => id !== task.id));
+      const taskToDelete = tasks.find((task) => task.id === id);
 
-    setUndoTask(taskToDelete);
+      setTasks((prev) => prev.filter((task) => id !== task.id));
 
-    timeOutRef.current = setTimeout(() => {
-      setUndoTask(null);
-    }, 2000);
-  });
+      setUndoTask(taskToDelete);
+
+      timeOutRef.current = setTimeout(() => {
+        setUndoTask(null);
+      }, 2000);
+    },
+    [tasks]
+  );
 
   const undoDelete = useCallback(() => {
     clearTimeout(timeOutRef.current);
 
-    setTasks((prev) => [...prev, undoTask]);
-
-    setUndoTask(null);
-  });
+    if (undoTask) {
+      setTasks((prev) => [...prev, undoTask]);
+      setUndoTask(null);
+    }
+  }, [undoTask]);
 
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
@@ -61,8 +67,8 @@ export default function App() {
 
   return (
     <>
-      <img src={react} alt="" className="absolute w-full h-full z-[-1]"/>
-      <div className="min-h-screen backdrop-blur-sm py-5 px-[5vw] dark:bg-[var(--primary)]/80">
+      <img src={react} alt="" className="absolute w-full h-full z-[-1]" />
+      <div className="min-h-screen py-2.5 px-[5vw] dark:bg-[var(--primary)]/80 backdrop-blur-sm">
         <Header />
         <Greeting />
         <AddTaskForm setTasks={setTasks} tasks={tasks} />
