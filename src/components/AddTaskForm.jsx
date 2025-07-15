@@ -17,12 +17,11 @@ export function AddTaskForm({ setTasks, tasks }) {
   }
 
   return (
-    <>
-      <label htmlFor="Add" className="font-sans mb-2 block">
-        Add next task
-      </label>
+    <section className="my-5">
+      <label htmlFor="Add">Add next task</label>
       <div className="relative">
         <input
+          className="border p-2 px-3 w-[80%] rounded-tl-sm rounded-bl-sm border-[var(--primary)]/25 outline-0 dark:border-[var(--primary-bg)]/40"
           type="text"
           name="Add"
           id="Add"
@@ -34,15 +33,9 @@ export function AddTaskForm({ setTasks, tasks }) {
               AddNewTask();
             }
           }}
-          className="border rounded-sm border-white/20 w-full p-2 outline-0"
         />
-        <button
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-[var(--accent)] py-2 px-4 rounded-tr-sm rounded-br-sm flex hover:bg-[var(--accent-hover)]"
-          onClick={AddNewTask}
-        >
-          Add
-        </button>
+        <button onClick={AddNewTask} className="absolute right-0 top-1/2 w-[20%] -translate-y-1/2 bg-[var(--accent)] py-2 px-4 rounded-tr-sm rounded-br-sm text-[var(--primary-bg)] border-[var(--primary)]/25 border">add</button>
       </div>
-    </>
+    </section>
   );
 }

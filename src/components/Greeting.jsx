@@ -3,12 +3,10 @@ export function Greeting() {
 
   return (
     <div className="my-5">
-      <h1 className="font-semibold text-3xl">
-        Hi! <span className="bg-linear-90 from-[var(--accent)] to-[var(--accent-2)] bg-clip-text text-transparent font-extrabold">{name}</span>
+      <h1 className="text-5xl">
+        Hi! <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-purple-500 font-extrabold">{name}</span>
       </h1>
-      <p>
-        Plan your day easily 😼
-      </p>
+      <p className="font-medium">Plan your day easily 😼</p>
     </div>
   );
 }

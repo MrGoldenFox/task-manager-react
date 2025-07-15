@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AddTaskForm } from "./components/AddTaskForm";
 import { Greeting } from "./components/Greeting";
 import { Header } from "./components/Header";
 import { SwitchTasks } from "./components/SwitchTasks";
 import { TaskList } from "./components/TaskList";
-import react from "./assets/react.svg"
+import react from "./assets/react.svg";
 
 export default function App() {
   const [tasks, setTasks] = useState(() => {
@@ -12,37 +12,57 @@ export default function App() {
 
     return stored ? JSON.parse(stored) : [];
   });
-
+  const [undoTask, setUndoTask] = useState(null);
   const [filter, setFilter] = useState("active");
+  const timeOutRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  function toggleCheckBox(id) {
-    const updatedTasks = tasks.map((task) =>
-      task.id === id ? { ...task, checked: !task.checked } : task
-    );
+  const toggleCheckBox = useCallback(
+    (id) => {
+      const updatedTasks = tasks.map((task) =>
+        task.id === id ? { ...task, checked: !task.checked } : task
+      );
 
-    setTasks(updatedTasks);
-  }
+      setTasks(updatedTasks);
+    },
+    [tasks]
+  );
 
-  function deleteTask(id) {
-    const updatedTasks = tasks.filter((task) => task.id !== id);
+  const deleteTask = useCallback((id) => {
+    const taskToDelete = tasks.find((task) => task.id === id);
 
-    setTasks(updatedTasks);
-  }
+    setTasks((prev) => prev.filter((task) => id !== task.id));
 
-  const filteredTasks = tasks.filter((task) => {
-    if (filter === "active") return !task.checked;
-    if (filter === "completed") return task.checked;
-    return true;
+    setUndoTask(taskToDelete);
+
+    timeOutRef.current = setTimeout(() => {
+      setUndoTask(null);
+    }, 2000);
   });
+
+  const undoDelete = useCallback(() => {
+    clearTimeout(timeOutRef.current);
+
+    setTasks((prev) => [...prev, undoTask]);
+
+    setUndoTask(null);
+  });
+
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) => {
+      if (filter === "active") return !task.checked;
+      if (filter === "completed") return task.checked;
+      return true;
+    });
+  }, [tasks, filter]);
 
   return (
     <>
-      <img src={react} alt="" className="fixed z-[-1] min-w-full min-h-full"/>
-      <div className="w-full mx-auto backdrop-blur-xs bg-[var(--primary-bg)]/90 min-h-screen px-[5vw] py-5">
+      <img src={react} alt="" className="absolute w-full h-full z-[-1]"/>
+      <div className="min-h-screen backdrop-blur-sm py-5 px-[5vw] dark:bg-[var(--primary)]/80">
         <Header />
         <Greeting />
         <AddTaskForm setTasks={setTasks} tasks={tasks} />
@@ -51,6 +71,8 @@ export default function App() {
           tasks={filteredTasks}
           toggleCheckBox={toggleCheckBox}
           deleteTask={deleteTask}
+          undoDelete={undoDelete}
+          undoTask={undoTask}
         />
       </div>
     </>
