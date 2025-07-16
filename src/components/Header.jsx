@@ -8,11 +8,11 @@ export function Header() {
 
   return (
     <header className="flex justify-between items-center my-5">
-      <img src={logo} alt="" className="w-10 h-10"/>
-      <div className="flex gap-2">
-        <ThemeBtn styles={btnStyles} />
-        <AuthBtn styles={btnStyles} />
-      </div>
+      <img src={logo} alt="" className="w-10 h-10" />
+      {/* <div className="flex gap-2"> */}
+      <ThemeBtn styles={btnStyles} />
+      {/* <AuthBtn styles={btnStyles} /> */}
+      {/* </div> */}
     </header>
   );
 }

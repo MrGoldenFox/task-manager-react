@@ -69,17 +69,19 @@ export default function App() {
     <>
       <img src={react} alt="" className="absolute w-full h-full z-[-1]" />
       <div className="min-h-screen py-2.5 px-[5vw] dark:bg-[var(--primary)]/80 backdrop-blur-sm">
-        <Header />
-        <Greeting />
-        <AddTaskForm setTasks={setTasks} tasks={tasks} />
-        <SwitchTasks setFilter={setFilter} filter={filter} />
-        <TaskList
-          tasks={filteredTasks}
-          toggleCheckBox={toggleCheckBox}
-          deleteTask={deleteTask}
-          undoDelete={undoDelete}
-          undoTask={undoTask}
-        />
+        <div className="container mx-auto">
+          <Header />
+          <Greeting />
+          <AddTaskForm setTasks={setTasks} tasks={tasks} />
+          <SwitchTasks setFilter={setFilter} filter={filter} />
+          <TaskList
+            tasks={filteredTasks}
+            toggleCheckBox={toggleCheckBox}
+            deleteTask={deleteTask}
+            undoDelete={undoDelete}
+            undoTask={undoTask}
+          />
+        </div>
       </div>
     </>
   );
