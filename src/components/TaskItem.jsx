@@ -1,6 +1,6 @@
-import { OctagonX } from "lucide-react";
+import { OctagonX, Star } from "lucide-react";
 
-export function TaskItem({ task, toggleCheckBox, deleteTask }) {
+export function TaskItem({ task, toggleCheckBox, deleteTask, setPrimaryTask }) {
   return (
     <li className="flex gap-2 justify-between items-center w-full border rounded-xs px-2 py-3 border-[var(--primary)]/40 dark:border-[var(--primary-bg)]/40">
       <div className="flex justify-between items-center gap-2">
@@ -12,9 +12,17 @@ export function TaskItem({ task, toggleCheckBox, deleteTask }) {
         />
         <p>{task.text}</p>
       </div>
-      <button onClick={() => deleteTask(task.id)}>
-        <OctagonX color="var(--red)" />
-      </button>
+      <div className="flex gap-1">
+        <button onClick={() => setPrimaryTask(task.id)}>
+          <Star
+            fill={task.star ? "var(--gold)" : "none"}
+            stroke="var(--gold)"
+          />
+        </button>
+        <button onClick={() => deleteTask(task.id)}>
+          <OctagonX color="var(--red)" />
+        </button>
+      </div>
     </li>
   );
 }

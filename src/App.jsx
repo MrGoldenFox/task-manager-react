@@ -5,6 +5,7 @@ import { Header } from "./components/Header";
 import { SwitchTasks } from "./components/SwitchTasks";
 import { TaskList } from "./components/TaskList";
 import react from "./assets/react.svg";
+import { Undo } from "lucide-react";
 
 export default function App() {
   const [tasks, setTasks] = useState(() => {
@@ -48,6 +49,16 @@ export default function App() {
     [tasks]
   );
 
+  const setPrimaryTask = useCallback(
+    (id) => {
+      const updatedTasks = tasks.map((task) =>
+        task.id === id ? { ...task, star: !task.star } : task
+      );
+      setTasks(updatedTasks);
+    },
+    [tasks]
+  );
+
   const undoDelete = useCallback(() => {
     clearTimeout(timeOutRef.current);
 
@@ -58,11 +69,13 @@ export default function App() {
   }, [undoTask]);
 
   const filteredTasks = useMemo(() => {
-    return tasks.filter((task) => {
-      if (filter === "active") return !task.checked;
-      if (filter === "completed") return task.checked;
-      return true;
-    });
+    return tasks
+      .filter((task) => {
+        if (filter === "active") return !task.checked;
+        if (filter === "completed") return task.checked;
+        return true;
+      })
+      .sort((a, b) => (b.star === true) - (a.star === true));
   }, [tasks, filter]);
 
   return (
@@ -80,9 +93,19 @@ export default function App() {
             deleteTask={deleteTask}
             undoDelete={undoDelete}
             undoTask={undoTask}
+            setPrimaryTask={setPrimaryTask}
           />
         </div>
       </div>
+      {undoTask && (
+        <button
+          onClick={() => undoDelete()}
+          className="w-screen fixed bottom-0 font-medium text-[var(--primary-bg)] bg-[var(--accent)] flex justify-center gap-4 text-md py-4"
+        >
+          <Undo color="var(--white)" />
+          Return task
+        </button>
+      )}
     </>
   );
 }

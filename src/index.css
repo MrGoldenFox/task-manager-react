@@ -16,11 +16,12 @@
   --white: #ffffff;
   --accent: #9c2cf3;
   --accent-hover: #9000ff;
-  --red: rgb(255, 68, 68);
+  --red: #ff4444;
+  --gold: #FFD700;
 }
 
 body {
-  padding: 0;
+  padding: 0 0 4rem 0;
   margin: 0;
   background-size: cover;
   overflow-x: hidden;

@@ -8,7 +8,7 @@ export function AddTaskForm({ setTasks, tasks }) {
 
     const newTasks = [
       ...tasks,
-      { text: value, checked: false, id: crypto.randomUUID() },
+      { text: value, checked: false, id: crypto.randomUUID(), star: false },
     ];
 
     setTasks(newTasks);
@@ -34,7 +34,12 @@ export function AddTaskForm({ setTasks, tasks }) {
             }
           }}
         />
-        <button onClick={AddNewTask} className="w-24 bg-[var(--accent)] py-2 px-4 rounded-tr-sm rounded-br-sm text-[var(--primary-bg)] border-[var(--primary)]/25 border border-l-0 hover:bg-[var(--accent-hover)] text-nowrap">Add New</button>
+        <button
+          onClick={AddNewTask}
+          className="w-24 bg-[var(--accent)] py-2 px-4 rounded-tr-sm rounded-br-sm text-[var(--primary-bg)] border-[var(--primary)]/25 border border-l-0 hover:bg-[var(--accent-hover)] text-nowrap"
+        >
+          Add New
+        </button>
       </div>
     </section>
   );
